@@ -1,54 +1,45 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería de GIFs</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            margin-top: 50px;
-            font-size: 2.5em;
-        }
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .gallery img {
-            margin: 15px;
-            width: 300px;
-            height: auto;
-            border: 3px solid #ddd;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-        .gallery img:hover {
-            transform: scale(1.05);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis GIFs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    img {
+      max-width: 300px;
+      margin: 10px;
+    }
+  </style>
 </head>
 <body>
+  <h1>Mis GIFs</h1>
+  <div id="gif-container"></div>
 
-    <h1>Galería de GIFs de mi repositorio</h1>
+  <script>
+    // URL del repositorio en GitHub
+    const repoURL = "https://api.github.com/repos/dollieourgifs/bangchan/contents/";
 
-    <div class="gallery">
-        <!-- GIF 1 -->
-        <img src="https://github.com/dollieourgifs/bangchan/BangChanGig" alt="GIF 1">
+    // Contenedor donde se mostrarán los GIFs
+    const container = document.getElementById('gif-container');
 
-        <!-- GIF 2 -->
-        <img src="https://raw.githubusercontent.com/tu_usuario/tu_repositorio/main/gif/gif2.gif" alt="GIF 2">
-
-        <!-- GIF 3 -->
-        <img src="https://raw.githubusercontent.com/tu_usuario/tu_repositorio/main/gif/gif3.gif" alt="GIF 3">
-    </div>
-
+    // Obtener la lista de archivos desde el repositorio
+    fetch(repoURL)
+      .then(response => response.json())
+      .then(files => {
+        files.forEach(file => {
+          if (file.name.endsWith('.gif')) { // Verificar que el archivo es un GIF
+            const img = document.createElement('img');
+            img.src = file.download_url; // Usar la URL directa del archivo
+            img.alt = file.name; // Texto alternativo
+            container.appendChild(img); // Agregar al contenedor
+          }
+        });
+      })
+      .catch(error => console.error('Error al cargar los GIFs:', error));
+  </script>
 </body>
 </html>
