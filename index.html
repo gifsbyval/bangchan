@@ -71,20 +71,26 @@ margin-top:30px;
     // Contenedor donde se mostrarán los GIFs
     const container = document.getElementById('gif-container');
 
-    // Obtener la lista de archivos desde el repositorio
-    fetch(repoURL)
-      .then(response => response.json())
-      .then(files => {
-        files.forEach(file => {
-          if (file.name.endsWith('.gif')) { // Verificar que el archivo es un GIF
-            const img = document.createElement('img');
-            img.src = file.download_url; // Usar la URL directa del archivo
-            img.alt = file.name; // Texto alternativo
-            container.appendChild(img); // Agregar al contenedor
-          }
-        });
-      })
-      .catch(error => console.error('Error al cargar los GIFs:', error));
-  </script>
+ // Obtener la lista de archivos desde el repositorio
+        fetch(repoURL)
+            .then(response => response.json())
+            .then(files => {
+                // Filtrar solo los GIFs
+                const gifs = files.filter(file => file.name.endsWith('.gif'));
+
+                // Ordenar los GIFs por fecha de actualización (de más reciente a más antiguo)
+                gifs.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+                // Mostrar los GIFs ordenados
+                gifs.forEach(file => {
+                    const img = document.createElement('img');
+                    img.src = file.download_url; // Usar la URL directa del archivo
+                    img.alt = file.name; // Texto alternativo
+                    img.classList.add('gif'); // Añadir la clase 'gif' para aplicar los estilos
+                    container.appendChild(img); // Agregar al contenedor
+                });
+            })
+            .catch(error => console.error('Error al cargar los GIFs:', error));
+    </script>
 </body>
 </html>
