@@ -44,6 +44,7 @@
             padding: 0; /* Elimina el relleno */
             box-sizing: border-box; /* Asegura que el relleno no afecte el ancho total */
             text-align: justify; /* Alinea los GIFs de forma fluida */
+            line-height: 0; /* Elimina el espacio entre las filas */
         }
 
         .gif {
@@ -84,12 +85,4 @@
                 gifs.forEach(file => {
                     const img = document.createElement('img');
                     img.src = file.download_url; // Usar la URL directa del archivo
-                    img.alt = file.name; // Texto alternativo
-                    img.classList.add('gif'); // Añadir la clase 'gif' para aplicar los estilos
-                    container.appendChild(img); // Agregar al contenedor
-                });
-            })
-            .catch(error => console.error('Error al cargar los GIFs:', error));
-    </script>
-</body>
-</html>
+                    img.alt = f
