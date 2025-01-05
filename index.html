@@ -8,49 +8,26 @@
         /* Estilos generales */
         body {
             font-family: "Arial", sans-serif;
-            background-color: #fff; /* Color de fondo */
+            background-color: #fff;
             margin: 0;
             padding: 0;
-        }
-
-        /* Encabezado */
-        #header {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        #header h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
-        #header h2 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 12px;
-            font-weight: 100;
-            word-spacing: 5px;
-            position: relative;
-            width: 390px; /* Establece el ancho */
-            margin: 0 auto; /* Centra horizontalmente */
         }
 
         /* Contenedor de los GIFs */
         #gifcontainer {
             width: 1400px; /* Ancho del contenido */
             margin: 0 auto;
-            padding: 20px 0; /* Añadido padding para separar los GIFs del borde */
+            padding: 0 20px; /* Añadir relleno a los lados para evitar que los GIFs estén pegados al borde */
             text-align: center;
             margin-top: 30px;
+            box-sizing: border-box; /* Asegurarse de que el relleno se incluye en el cálculo del ancho */
         }
 
         .gif {
             display: inline-block;
             width: 268px;
             height: 150px;
-            margin: 0px; /* Añadido margen a todos los GIFs para separarlos */
+            margin: 10px; /* Añadir margen entre los GIFs */
         }
     </style>
 </head>
@@ -67,23 +44,28 @@
         const repoURL = "https://api.github.com/repos/dollieourgifs/bangchan/contents/";
 
         // Contenedor donde se mostrarán los GIFs
-        const container = document.getElementById('gif-container');
+        const container = document.getElementById('gifcontainer');
 
         // Obtener la lista de archivos desde el repositorio
         fetch(repoURL)
             .then(response => response.json())
             .then(files => {
-                files.forEach(file => {
-                    if (file.name.endsWith('.gif')) { // Verificar que el archivo es un GIF
-                        const img = document.createElement('img');
-                        img.src = file.download_url; // Usar la URL directa del archivo
-                        img.alt = file.name; // Texto alternativo
-                        img.classList.add('gif'); // Añadir la clase 'gif' para aplicar los estilos
-                        container.appendChild(img); // Agregar al contenedor
-                    }
+                // Filtrar solo los GIFs
+                const gifs = files.filter(file => file.name.endsWith('.gif'));
+
+                // Ordenar los GIFs por nombre
+                gifs.sort((a, b) => b.name.localeCompare(a.name));
+
+                // Mostrar los GIFs ordenados
+                gifs.forEach(file => {
+                    const img = document.createElement('img');
+                    img.src = file.download_url; // Usar la URL directa del archivo
+                    img.alt = file.name; // Texto alternativo
+                    img.classList.add('gif'); // Añadir la clase 'gif' para aplicar los estilos
+                    container.appendChild(img); // Agregar al contenedor
                 });
             })
             .catch(error => console.error('Error al cargar los GIFs:', error));
-    </script>
+</script>
 </body>
 </html>
